@@ -1,21 +1,33 @@
 import com.amazon.deequ.schema.{RowLevelSchema, RowLevelSchemaValidator}
 import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.rogach.scallop.{LazyMap, ScallopConf}
 
-object DemoSchemaValidator {
+object abc_SchemaValidator_4711 {
+
+  class Conf(args: Seq[String])
+    extends ScallopConf(args) {
+    val propsMap: LazyMap[String, String] = props[String]('P')
+    verify()
+  }
 
   def main(args: Array[String]): Unit = {
 
+    val conf = new Conf(args)
+    val input_filename: String = conf.propsMap("input_filename")
+    val input_path: String = conf.propsMap("input_path")
+    val output_path: String = conf.propsMap("output_path")
+
+    println("input_filename is: " + input_filename)
+    println("input_path is: " + input_path)
+    println("output_path is: " + output_path)
+
     val spark = SparkSession
       .builder()
-      .appName("DemoSchemaValidator")
+      .appName("abc_SchemaValidator_4711")
       .master("local")
       .getOrCreate()
 
     spark.sparkContext.setLogLevel("WARN")
-
-    val input_filename: String = "amazon_reviews_us_Jewelry_v1_00.tsv"
-    val input_path: String = "./data/input/"
-    val output_path: String = "./data/output/"
 
     val dataset = spark.read
       .option("header", value = true)
@@ -24,6 +36,7 @@ object DemoSchemaValidator {
       .csv(input_path + input_filename)
 
     dataset.printSchema()
+
 
     println("RAW dataset:")
     dataset.show(10)
@@ -37,11 +50,10 @@ object DemoSchemaValidator {
 
     val result = RowLevelSchemaValidator.validate(dataset, schema)
 
-    println("numValidRows: " + result.numValidRows)
-    println("numInvalidRows: " + result.numInvalidRows)
+    println(s"\nnumValidRows: " + result.numValidRows)
+    println(s"\nnumInvalidRows: " + result.numInvalidRows)
 
-    println("Invalid Rows:")
-
+    println(s"\nInvalid Rows:")
     result.invalidRows.show(truncate = true)
 
     result.validRows.write.mode(SaveMode.Overwrite)

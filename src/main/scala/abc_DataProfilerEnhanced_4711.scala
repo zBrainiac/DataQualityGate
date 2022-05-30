@@ -1,23 +1,36 @@
 import com.amazon.deequ.profiles.{ColumnProfilerRunner, NumericColumnProfile}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.lit
+import org.rogach.scallop.{LazyMap, ScallopConf}
 
 import java.time.Instant
 
-object DemoDataProfilerEnhanced {
+object abc_DataProfilerEnhanced_4711 {
+
+  class Conf(args: Seq[String])
+    extends ScallopConf(args) {
+    val propsMap: LazyMap[String, String] = props[String]('P')
+    verify()
+  }
 
   def main(args: Array[String]): Unit = {
+
+    val conf = new Conf(args)
+    val input_filename: String = conf.propsMap("input_filename")
+    val input_path: String = conf.propsMap("input_path")
+    val output_path: String = conf.propsMap("output_path")
+
+    println("input_filename is: " + input_filename)
+    println("input_path is: " + input_path)
+    println("output_path is: " + output_path)
+
     val spark = SparkSession
       .builder()
-      .appName("DemoDataProfilerEnhanced")
+      .appName("abc_DataProfilerEnhanced_4711")
       .master("local")
       .getOrCreate()
 
     spark.sparkContext.setLogLevel("WARN")
-
-    val input_filename: String = "amazon_reviews_us_Jewelry_v1_00.tsv"
-    val input_path: String = "./data/input/"
-    val output_path: String = "./data/output/"
 
     val current_tsd: String = Instant.now().toString
       .replace(":", "")
