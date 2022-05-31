@@ -16,6 +16,10 @@ object abc_DataValidator_4711 {
 
   def main(args: Array[String]): Unit = {
 
+    val object_name = getClass.getName
+    val name = object_name.substring(0, object_name.length -1)
+    println("object_name: " + name)
+
     val conf = new Conf(args)
     val input_filename: String = conf.propsMap("input_filename")
     val input_path: String = conf.propsMap("input_path")
@@ -27,7 +31,7 @@ object abc_DataValidator_4711 {
 
     val spark = SparkSession
       .builder()
-      .appName("abc_DataValidator_4711")
+      .appName(name)
       .master("local")
       .getOrCreate()
 
@@ -45,6 +49,7 @@ object abc_DataValidator_4711 {
     val resultKey = ResultKey(System.currentTimeMillis(), Map("tag" -> "repositoryExample"))
 
     dataset.printSchema()
+    
     println("RAW dataset:")
     dataset.show(10)
 

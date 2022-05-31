@@ -15,6 +15,10 @@ object abc_DataProfilerEnhanced_4711 {
 
   def main(args: Array[String]): Unit = {
 
+    val object_name = getClass.getName
+    val name = object_name.substring(0, object_name.length -1)
+    println("object_name: " + name)
+    
     val conf = new Conf(args)
     val input_filename: String = conf.propsMap("input_filename")
     val input_path: String = conf.propsMap("input_path")
@@ -26,7 +30,7 @@ object abc_DataProfilerEnhanced_4711 {
 
     val spark = SparkSession
       .builder()
-      .appName("abc_DataProfilerEnhanced_4711")
+      .appName(name)
       .master("local")
       .getOrCreate()
 
@@ -46,6 +50,7 @@ object abc_DataProfilerEnhanced_4711 {
     val metric_file = output_path + "profile/" + current_tsd + "_" + input_filename + ".json"
 
     dataset.printSchema()
+    
     println("RAW dataset:")
     dataset.show(10)
 

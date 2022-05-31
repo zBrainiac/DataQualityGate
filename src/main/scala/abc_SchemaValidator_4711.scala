@@ -12,6 +12,10 @@ object abc_SchemaValidator_4711 {
 
   def main(args: Array[String]): Unit = {
 
+    val object_name = getClass.getName
+    val name = object_name.substring(0, object_name.length -1)
+    println("object_name: " + name)
+
     val conf = new Conf(args)
     val input_filename: String = conf.propsMap("input_filename")
     val input_path: String = conf.propsMap("input_path")
@@ -23,7 +27,7 @@ object abc_SchemaValidator_4711 {
 
     val spark = SparkSession
       .builder()
-      .appName("abc_SchemaValidator_4711")
+      .appName(name)
       .master("local")
       .getOrCreate()
 
@@ -36,7 +40,6 @@ object abc_SchemaValidator_4711 {
       .csv(input_path + input_filename)
 
     dataset.printSchema()
-
 
     println("RAW dataset:")
     dataset.show(10)
@@ -57,13 +60,12 @@ object abc_SchemaValidator_4711 {
     result.invalidRows.show(truncate = true)
 
     result.validRows.write.mode(SaveMode.Overwrite)
-      .orc(output_path + "test_DemoSchemaValidator_valid_orc")
+      .orc(output_path + name + "_valid_orc")
 
     result.validRows.write.mode(SaveMode.Overwrite)
-      .csv(output_path + "test_DemoSchemaValidator_valid_csv")
+      .csv(output_path + name +  "_valid_csv")
 
     result.invalidRows.write.mode(SaveMode.Overwrite)
-      .csv(output_path + "test_DemoSchemaValidator_invalid")
-
+      .csv(output_path + name + "_invalid")
   }
 }
