@@ -1,4 +1,4 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "0.1.1-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.12.15"
 
@@ -18,5 +18,11 @@ lazy val root = (project in file("."))
 libraryDependencies ++= Seq(
   "com.amazon.deequ" % "deequ" % "2.0.1-spark-3.2",
   "org.apache.spark" %% "spark-sql" % "3.2.1" % "provided",
-  "org.rogach" %% "scallop" % "4.1.0"
+  "org.rogach" %% "scallop" % "4.1.0",
+  "io.prometheus" % "simpleclient_pushgateway" % "0.15.0"
 )
+
+
+
+
+//  , "io.prometheus" % "simpleclient_pushgateway" % "0.15.0"

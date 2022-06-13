@@ -5,3 +5,4 @@
 /target/scala-2.12/classes/
 /data/output/
 /data/input/amazon_reviews_us_Jewelry_v1_00.tsv
+/docker-spark/read.md
